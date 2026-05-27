@@ -9,6 +9,12 @@
   <dependencies>
         <dependency>
             <groupId>com.restaurante</groupId>
+            <artifactId>restaurante-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.restaurante</groupId>
             <artifactId>restaurante-pedidos</artifactId>
             <version>${project.version}</version>
         </dependency>
