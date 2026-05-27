@@ -1,23 +1,43 @@
-HELP.md
+# ====================================================================
+# Archivos y Carpetas de Compilación (Maven)
+# ====================================================================
+# Ignora la carpeta target de la raíz y de CADA UNO de los módulos de forma recursiva
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
 
-### STS ###
-.apt_generated
+# Archivo de ayuda generado automáticamente por Spring Initializr
+HELP.md
+
+# ====================================================================
+# Entornos de Desarrollo (IDEs)
+# ====================================================================
+
+### Eclipse / Spring Tool Suite (STS) ###
+.metadata/
 .classpath
-.factorypath
 .project
-.settings
+.settings/
+.factorypath
 .springBeans
-.sts4-cache
+.sts4-cache/
+*.tmp
+*.bak
+*.swp
+local.properties
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
+
+### VS Code ###
+.vscode/
 
 ### NetBeans ###
 /nbproject/private/
@@ -26,8 +46,12 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# ====================================================================
+# Sistema Operativo y Archivos Temporales
+# ====================================================================
+Thumbs.db
+.DS_Store
+*.log
+logs/
+
