@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/pruebas")
@@ -17,17 +17,16 @@ public class TenantTestController {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @GetMapping("/tenant")
+    @GetMapping("/menu")
     @Transactional(readOnly = true)
-    public ResponseEntity<Map<String, String>> verificarSchemaActual() {
-       
-        String schemaActual = (String) entityManager
-                .createNativeQuery("SHOW search_path")
-                .getSingleResult();
+    @SuppressWarnings("unchecked")
+    public ResponseEntity<List<?>> obtenerMenuDelRestaurante() {
+        // Hacemos una consulta nativa a "platillos". 
+        // Como no le ponemos prefijo de esquema, PostgreSQL usará el search_path activo en el hilo.
+        List<?> platillos = entityManager
+                .createNativeQuery("SELECT id, nombre, precio FROM platillos")
+                .getResultList();
 
-        return ResponseEntity.ok(Map.of(
-                "status", "OK",
-                "schema_en_uso", schemaActual
-        ));
+        return ResponseEntity.ok(platillos);
     }
 }
