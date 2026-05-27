@@ -22,6 +22,15 @@ public class Pedido {
         this.fechaCreacion = LocalDateTime.now();
         this.items = new ArrayList<>();
     }
+    
+    public Pedido(String id, String telefonoCliente, EstadoPedido estado, BigDecimal total, LocalDateTime fechaCreacion) {
+        this.id = id;
+        this.telefonoCliente = telefonoCliente;
+        this.estado = estado;
+        this.total = total;
+        this.fechaCreacion = fechaCreacion;
+        this.items = new ArrayList<>(); // Los detalles de relación se poblarán en fases posteriores
+    }
 
     // Regla: Añadir comida al carrito
     public void agregarPlatillo(Platillo platillo) {
