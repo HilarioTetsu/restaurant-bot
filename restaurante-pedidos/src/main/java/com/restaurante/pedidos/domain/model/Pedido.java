@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Pedido {
     private final String id; // UUID de la sesión del bot
@@ -11,7 +12,7 @@ public class Pedido {
     private EstadoPedido estado;
     private BigDecimal total;
     private final LocalDateTime fechaCreacion;
-    private final List<Platillo> items;
+    private final List<PedidoItem> items;
 
     // Constructor para inicializar un pedido nuevo desde el bot
     public Pedido(String id, String telefonoCliente) {
@@ -32,16 +33,33 @@ public class Pedido {
         this.items = new ArrayList<>(); // Los detalles de relación se poblarán en fases posteriores
     }
 
-    // Regla: Añadir comida al carrito
-    public void agregarPlatillo(Platillo platillo) {
+    // Lógica de negocio: Valida disponibilidad, acumula cantidad si ya existe, y calcula totales
+    public void agregarPlatillo(Platillo platillo, int cantidad) {
         if (this.estado != EstadoPedido.EN_CREACION) {
             throw new IllegalStateException("No puedes modificar un pedido que ya fue enviado para revision.");
         }
         if (!platillo.isDisponible()) {
             throw new IllegalArgumentException("El platillo '" + platillo.getNombre() + "' no esta disponible hoy.");
         }
-        this.items.add(platillo);
-        this.total = this.total.add(platillo.getPrecio());
+
+        // Buscar si el platillo ya se encuentra en el carrito actual
+        Optional<PedidoItem> itemExistente = items.stream()
+                .filter(item -> item.getPlatillo().getId().equals(platillo.getId()))
+                .findFirst();
+
+        if (itemExistente.isPresent()) {
+            itemExistente.get().incrementarCantidad(cantidad);
+        } else {
+            this.items.add(new PedidoItem(platillo, cantidad));
+        }
+
+        recalcularTotal();
+    }
+
+    private void recalcularTotal() {
+        this.total = items.stream()
+                .map(PedidoItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     // Transición 1: Cliente termina de elegir y solicita confirmación del negocio
@@ -95,11 +113,11 @@ public class Pedido {
         this.estado = EstadoPedido.CANCELADO;
     }
 
-    
+
     public String getId() { return id; }
     public String getTelefonoCliente() { return telefonoCliente; }
     public EstadoPedido getEstado() { return estado; }
     public BigDecimal getTotal() { return total; }
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
-    public List<Platillo> getItems() { return new ArrayList<>(items); }
+    public List<PedidoItem> getItems() { return new ArrayList<>(items); }
 }
