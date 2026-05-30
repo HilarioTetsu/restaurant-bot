@@ -2,21 +2,16 @@ package com.restaurante.pedidos.infrastructure.persistence.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 import com.restaurante.pedidos.domain.model.EstadoPedido;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "pedidos")
 public class PedidoEntity {
-	
-	@Id
+
+    @Id
     private String id;
 
     @Column(name = "telefono_cliente", nullable = false)
@@ -31,6 +26,10 @@ public class PedidoEntity {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoItemEntity> items = new ArrayList<>();
+
     // Getters y Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -42,4 +41,6 @@ public class PedidoEntity {
     public void setTotal(BigDecimal total) { this.total = total; }
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+    public List<PedidoItemEntity> getItems() { return items; }
+    public void setItems(List<PedidoItemEntity> items) { this.items = items; }
 }

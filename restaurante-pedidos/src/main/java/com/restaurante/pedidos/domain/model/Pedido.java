@@ -113,6 +113,11 @@ public class Pedido {
         this.estado = EstadoPedido.CANCELADO;
     }
 
+    // Método exclusivo para rehidratación desde la capa de infraestructura
+    public void rehidratarItems(List<PedidoItem> itemsCargados) {
+        this.items.clear();
+        this.items.addAll(itemsCargados);
+    }
 
     public String getId() { return id; }
     public String getTelefonoCliente() { return telefonoCliente; }

@@ -23,20 +23,17 @@ public class AgregarPlatilloUseCase implements IAgregarPlatilloPort{
 
 
 
-	@Override
-    public Pedido ejecutar(String pedidoId, String telefonoCliente, Long platilloId) {
-       
+    @Override
+    public Pedido ejecutar(String pedidoId, String telefonoCliente, Long platilloId, int cantidad) {
         Platillo platillo = platilloRepository.buscarPorId(platilloId)
                 .orElseThrow(() -> new IllegalArgumentException("El platillo con ID " + platilloId + " no existe."));
 
-        // 2. Obtener el pedido (sesión de bot) activo, o inicializar uno nuevo si es su primer mensaje
         Pedido pedido = pedidoRepository.buscarPorId(pedidoId)
                 .orElseGet(() -> new Pedido(pedidoId, telefonoCliente));
 
-        // 3. Delegar la mutación al modelo de Dominio (aplica las reglas de estado y totales)
-        pedido.agregarPlatillo(platillo);
+        // Delegamos la mutación pasando la cantidad correspondiente
+        pedido.agregarPlatillo(platillo, cantidad);
 
-        // 4. Salvar el estado final mediante el puerto de salida
         pedidoRepository.guardar(pedido);
 
         return pedido;

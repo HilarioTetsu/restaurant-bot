@@ -34,4 +34,7 @@ public class PedidoItem {
     public Platillo getPlatillo() { return platillo; }
     public int getCantidad() { return cantidad; }
     public BigDecimal getPrecioUnitario() { return precioUnitario; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
