@@ -13,6 +13,7 @@ import com.restaurante.pedidos.infrastructure.persistence.entity.PedidoEntity;
 import com.restaurante.pedidos.infrastructure.persistence.entity.PedidoItemEntity;
 import com.restaurante.pedidos.infrastructure.persistence.entity.PlatilloEntity;
 import com.restaurante.pedidos.infrastructure.persistence.repository.IJpaPedidoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class PedidoPersistenceAdapter implements IPedidoRepository {
@@ -24,6 +25,7 @@ public class PedidoPersistenceAdapter implements IPedidoRepository {
     }
 
     @Override
+    @Transactional
     public void guardar(Pedido pedido) {
         PedidoEntity entity = new PedidoEntity();
         entity.setId(pedido.getId());
@@ -53,6 +55,7 @@ public class PedidoPersistenceAdapter implements IPedidoRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Pedido> buscarPorId(String id) {
         return jpaPedidoRepository.findById(id)
                 .map(entity -> {

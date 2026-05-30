@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.restaurante.pedidos.application.ports.out.IPlatilloRepository;
 import com.restaurante.pedidos.domain.model.Platillo;
 import com.restaurante.pedidos.infrastructure.persistence.repository.IJpaPlatilloRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class PlatilloPersistenceAdapter implements IPlatilloRepository {
@@ -18,6 +19,7 @@ public class PlatilloPersistenceAdapter implements IPlatilloRepository {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
     public Optional<Platillo> buscarPorId(Long id) {
         return jpaPlatilloRepository.findById(id)
                 .map(entity -> new Platillo(
